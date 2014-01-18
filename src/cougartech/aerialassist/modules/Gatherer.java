@@ -3,7 +3,7 @@ package cougartech.aerialassist.modules;
 public class Gatherer
 {
     
-    public Gatherer()
+    public Gatherer(int value)
     {
         
     }
