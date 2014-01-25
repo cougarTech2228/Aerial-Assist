@@ -16,6 +16,9 @@ public class RobotMap
     int sM2 = 15;
     int sStopSwitch = 1;
     int sBallDetect = 2;
+    int gA1 = 1;
+    int gA2 = 2;
+    int gTilter = 16;
     int j1 = 1;
     int j2 = 2;
     

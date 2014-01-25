@@ -25,6 +25,7 @@ public class RobotMain extends IterativeRobot
         joy1 = new Joystick(robotMap.j1);
         joy2 = new Joystick(robotMap.j2);
         shooter = new Shooter(robotMap.sM1, robotMap.sM2, robotMap.sStopSwitch, robotMap.sBallDetect);
+        gatherer = new Gatherer(robotMap.gA1, robotMap.gA2, robotMap.gTilter);
     }
 
     public void autonomousPeriodic()
