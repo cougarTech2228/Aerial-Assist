@@ -34,6 +34,8 @@ public class RobotMain extends IterativeRobot
 
     public void teleopPeriodic()
     {
+        gatherer.initTilter();
+        
         if(wantShoot && shooter.shooting)
         {
             shooter.shoot();
@@ -46,6 +48,33 @@ public class RobotMain extends IterativeRobot
         if(!shooter.shooting)
         {
             wantShoot = false;
+        }
+        
+        
+        if(joy2.getRawButton(5))
+        {
+            gatherer.armDirection(0);
+            gatherer.tiltArm(1);
+        }
+        else if(joy2.getRawButton(3))
+        {
+            gatherer.armDirection(1);
+            gatherer.tiltArm(1);
+        }
+        else if(joy2.getRawButton(6))
+        {
+            gatherer.armDirection(0);
+            gatherer.tiltArm(-1);
+        }
+        else if(joy2.getRawButton(4))
+        {
+            gatherer.armDirection(-1);
+            gatherer.tiltArm(-1);
+        }
+        else
+        {
+            gatherer.armDirection(0);
+            gatherer.tiltArm(0);
         }
     }
 
