@@ -49,7 +49,6 @@ public class Gatherer
         try
         {
             tilter.enableControl();
-            tilter.configSoftPositionLimits(forwardLimitPosition, reverseLimitPosition);
         }
         catch(CANTimeoutException ex)
         {
@@ -57,8 +56,40 @@ public class Gatherer
         }
     }
     
-    public void tilt(int direction)
+    public void tiltArm(int direction)
     {
-        
+        if(direction == 1)
+        {   
+            try
+            {
+                tilter.setX(0.5);
+            }
+            catch(CANTimeoutException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+        else if(direction == -1)
+        {
+            try
+            {
+                tilter.setX(-0.5);
+            }
+            catch(CANTimeoutException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+        else
+        {
+           try
+            {
+                tilter.setX(0.0);
+            }
+            catch(CANTimeoutException ex)
+            {
+                ex.printStackTrace(); 
+            }
+        }
     }
 }
