@@ -11,17 +11,21 @@ public class Drivebase
     CANJaguar mLB;
     CANJaguar mRF;
     CANJaguar mRB;
-    Joystick joy;
+    public Joystick driveJoy;
     
-    public Drivebase(int mLFPort, int mLBPort, int mRFPort, int mRBPort)
+    public Drivebase(int mLFPort, int mLBPort, int mRFPort, int mRBPort, int joyPort)
     {
-        joy = new Joystick(1);
+        driveJoy = new Joystick(joyPort);
         try
         {
             mLF = new CANJaguar(mLFPort, CANJaguar.ControlMode.kPercentVbus);
             mLB = new CANJaguar(mLBPort, CANJaguar.ControlMode.kPercentVbus);
             mRF = new CANJaguar(mRFPort, CANJaguar.ControlMode.kPercentVbus);
             mRB = new CANJaguar(mRBPort, CANJaguar.ControlMode.kPercentVbus);
+            mLF.enableControl();
+            mLB.enableControl();
+            mRF.enableControl();
+            mRB.enableControl();
         }
         catch(CANTimeoutException ex)
         {
@@ -32,49 +36,64 @@ public class Drivebase
         }
     }
     
+    public void driveForward(double speed)
+    {
+        try
+        {            
+            mLF.setX(speed);
+            mLB.setX(speed);
+            mRF.setX(speed);
+            mRB.setX(speed);
+        }
+        catch(CANTimeoutException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+    
     public int joyDirection()
     {
-        if(joy.getTwist() > 0.3)
+        if(driveJoy.getTwist() > 0.3)
         {
             return 8;
         }
-        else if(joy.getTwist() < -0.3)
+        else if(driveJoy.getTwist() < -0.3)
         {
             return 9;
         }
-        else if(joy.getMagnitude() < 0.3)
+        else if(driveJoy.getMagnitude() < 0.3)
         {
             return -1;
         }
-        else if(joy.getDirectionDegrees() > -22.5 && joy.getDirectionDegrees() <= 22.5)
+        else if(driveJoy.getDirectionDegrees() > -22.5 && driveJoy.getDirectionDegrees() <= 22.5)
         {
             return 0;
         }
-        else if(joy.getDirectionDegrees() > 22.5 && joy.getDirectionDegrees() <= 67.5)
+        else if(driveJoy.getRawButton(6))
         {
             return 1;
         }
-        else if(joy.getDirectionDegrees() > 67.5 && joy.getDirectionDegrees() <= 112.5)
+        else if(driveJoy.getDirectionDegrees() > 67.5 && driveJoy.getDirectionDegrees() <= 112.5)
         {
             return 2;
         }
-        else if(joy.getDirectionDegrees() > 112.5 && joy.getDirectionDegrees() <= 157.5)
+        else if(driveJoy.getRawButton(4))
         {
             return 3;
         }
-        else if(joy.getDirectionDegrees() > 157.5 || joy.getDirectionDegrees() <= -157.5)
+        else if(driveJoy.getDirectionDegrees() > 157.5 || driveJoy.getDirectionDegrees() <= -157.5)
         {
             return 4;
         }
-        else if(joy.getDirectionDegrees() > -157.5 && joy.getDirectionDegrees() <= -112.5)
+        else if(driveJoy.getRawButton(3))
         {
             return 5;
         }
-        else if(joy.getDirectionDegrees() > -112.5 && joy.getDirectionDegrees() <= -67.5)
+        else if(driveJoy.getDirectionDegrees() > -112.5 && driveJoy.getDirectionDegrees() <= -67.5)
         {
             return 6;
         }
-        else if(joy.getDirectionDegrees() > -67.5 && joy.getDirectionDegrees() <= -22.5)
+        else if(driveJoy.getRawButton(5))
         {
             return 7;
         }
@@ -85,32 +104,16 @@ public class Drivebase
     }
     
     public void doDrive()
-    {
-        //Enables control of Jaguar
-        try
-        {
-            mLF.enableControl();
-            mLB.enableControl();
-            mRF.enableControl();
-            mRB.enableControl();
-        }
-        catch(CANTimeoutException ex)
-        {
-            System.out.println("<CANTimeoutException>");
-            System.out.println("Where: Enable Control");
-            ex.printStackTrace();
-            System.out.println("</CANTimeoutException>");
-        }
-                
+    {            
         //F
         if(this.joyDirection() == 0)
         {
             try
             {            
-                mLF.setX(joy.getMagnitude());
-                mLB.setX(joy.getMagnitude());
-                mRF.setX(joy.getMagnitude());
-                mRB.setX(joy.getMagnitude());
+                mLF.setX(driveJoy.getMagnitude());
+                mLB.setX(driveJoy.getMagnitude());
+                mRF.setX(driveJoy.getMagnitude());
+                mRB.setX(driveJoy.getMagnitude());
             }
             catch(CANTimeoutException ex)
             {
@@ -122,10 +125,10 @@ public class Drivebase
         {
             try
             {            
-                mLF.setX(-joy.getMagnitude());
+                mLF.setX(-driveJoy.getMagnitude());
                 mLB.setX(0.0);
                 mRF.setX(0.0);
-                mRB.setX(-joy.getMagnitude());
+                mRB.setX(-driveJoy.getMagnitude());
             }
             catch(CANTimeoutException ex)
             {
@@ -137,10 +140,10 @@ public class Drivebase
         {
             try
             {            
-                mLF.setX(joy.getMagnitude());
-                mLB.setX(-joy.getMagnitude());
-                mRF.setX(-joy.getMagnitude());
-                mRB.setX(joy.getMagnitude());
+                mLF.setX(driveJoy.getMagnitude());
+                mLB.setX(-driveJoy.getMagnitude());
+                mRF.setX(-driveJoy.getMagnitude());
+                mRB.setX(driveJoy.getMagnitude());
             }
             catch(CANTimeoutException ex)
             {
@@ -153,8 +156,8 @@ public class Drivebase
             try
             {            
                 mLF.setX(0.0);
-                mLB.setX(joy.getMagnitude());
-                mRF.setX(joy.getMagnitude());
+                mLB.setX(driveJoy.getMagnitude());
+                mRF.setX(driveJoy.getMagnitude());
                 mRB.setX(0.0);
             }
             catch(CANTimeoutException ex)
@@ -167,10 +170,10 @@ public class Drivebase
         {
             try
             {            
-                mLF.setX(-joy.getMagnitude());
-                mLB.setX(-joy.getMagnitude());
-                mRF.setX(-joy.getMagnitude());
-                mRB.setX(-joy.getMagnitude());
+                mLF.setX(-driveJoy.getMagnitude());
+                mLB.setX(-driveJoy.getMagnitude());
+                mRF.setX(-driveJoy.getMagnitude());
+                mRB.setX(-driveJoy.getMagnitude());
             }
             catch(CANTimeoutException ex)
             {
@@ -182,10 +185,10 @@ public class Drivebase
         {
             try
             {            
-                mLF.setX(joy.getMagnitude());
+                mLF.setX(driveJoy.getMagnitude());
                 mLB.setX(0.0);
                 mRF.setX(0.0);
-                mRB.setX(joy.getMagnitude());
+                mRB.setX(driveJoy.getMagnitude());
             }
             catch(CANTimeoutException ex)
             {
@@ -197,10 +200,10 @@ public class Drivebase
         {
             try
             {            
-                mLF.setX(-joy.getMagnitude());
-                mLB.setX(joy.getMagnitude());
-                mRF.setX(joy.getMagnitude());
-                mRB.setX(-joy.getMagnitude());
+                mLF.setX(-driveJoy.getMagnitude());
+                mLB.setX(driveJoy.getMagnitude());
+                mRF.setX(driveJoy.getMagnitude());
+                mRB.setX(-driveJoy.getMagnitude());
             }
             catch(CANTimeoutException ex)
             {
@@ -213,8 +216,8 @@ public class Drivebase
             try
             {            
                 mLF.setX(0.0);
-                mLB.setX(-joy.getMagnitude());
-                mRF.setX(-joy.getMagnitude());
+                mLB.setX(-driveJoy.getMagnitude());
+                mRF.setX(-driveJoy.getMagnitude());
                 mRB.setX(0.0);
             }
             catch(CANTimeoutException ex)
@@ -227,10 +230,10 @@ public class Drivebase
         {
             try
             {            
-                mLF.setX((Math.abs(joy.getMagnitude()) - 0.25));
-                mLB.setX((Math.abs(joy.getMagnitude()) - 0.25));
-                mRF.setX(-(Math.abs(joy.getMagnitude()) - 0.25));
-                mRB.setX(-(Math.abs(joy.getMagnitude()) - 0.25));
+                mLF.setX((Math.abs(driveJoy.getMagnitude()) - 0.25));
+                mLB.setX((Math.abs(driveJoy.getMagnitude()) - 0.25));
+                mRF.setX(-(Math.abs(driveJoy.getMagnitude()) - 0.25));
+                mRB.setX(-(Math.abs(driveJoy.getMagnitude()) - 0.25));
             }
             catch(CANTimeoutException ex)
             {
@@ -242,10 +245,10 @@ public class Drivebase
         {
             try
             {            
-                mLF.setX(-(Math.abs(joy.getMagnitude()) - 0.25));
-                mLB.setX(-(Math.abs(joy.getMagnitude()) - 0.25));
-                mRF.setX((Math.abs(joy.getMagnitude()) - 0.25));
-                mRB.setX((Math.abs(joy.getMagnitude()) - 0.25));
+                mLF.setX(-(Math.abs(driveJoy.getMagnitude()) - 0.25));
+                mLB.setX(-(Math.abs(driveJoy.getMagnitude()) - 0.25));
+                mRF.setX((Math.abs(driveJoy.getMagnitude()) - 0.25));
+                mRB.setX((Math.abs(driveJoy.getMagnitude()) - 0.25));
             }
             catch(CANTimeoutException ex)
             {

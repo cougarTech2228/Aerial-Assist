@@ -18,6 +18,7 @@ public class Gatherer
         try
         {
             tilter = new CANJaguar(tilterPort);
+            tilter.enableControl();
         }
         catch(CANTimeoutException ex)
         {
@@ -43,19 +44,7 @@ public class Gatherer
             arm2.set(0.0);
         }
     }
-    
-    public void initTilter()
-    {
-        try
-        {
-            tilter.enableControl();
-        }
-        catch(CANTimeoutException ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-    
+
     public void tiltArm(int direction)
     {
         if(direction == 1)

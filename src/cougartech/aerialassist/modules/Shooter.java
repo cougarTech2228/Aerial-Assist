@@ -7,16 +7,16 @@ import java.util.Date;
 
 public class Shooter
 {
+    
     CANJaguar motor;
     CANJaguar motor2;
     DigitalInput stopSwitch;
-    DigitalInput ballDetect;
+    public DigitalInput ballDetect;
     Date nowTime;
     public boolean shooting = false;
     boolean reset = false;
     long sTime;
-    long timePer = 120;
-            
+    
     public Shooter(int motorPort, int motor2Port, int stopPort, int ballDetectPort)
     {
         stopSwitch = new DigitalInput(stopPort);
@@ -25,19 +25,6 @@ public class Shooter
         {    
             motor = new CANJaguar(motorPort);
             motor2 = new CANJaguar(motor2Port);
-        }
-        catch(CANTimeoutException ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-    
-    public void shoot()
-    {
-        nowTime = new Date();
-    
-        try
-        {
             motor.enableControl();
             motor2.enableControl();
         }
@@ -45,6 +32,12 @@ public class Shooter
         {
             ex.printStackTrace();
         }
+    }
+    
+    
+    public void shoot(long timePer, double motorPower)
+    {
+        nowTime = new Date();
       
         if(shooting)
         {
@@ -52,8 +45,8 @@ public class Shooter
                 {
                     try
                     {
-                        motor.setX(1.0);
-                        motor2.setX(1.0);
+                        motor.setX(motorPower);
+                        motor2.setX(motorPower);
                     }
                     catch(CANTimeoutException ex)
                     {
@@ -113,9 +106,5 @@ public class Shooter
                 }                
             }
         }
-        else
-        {
-            
-        } 
     }
 }

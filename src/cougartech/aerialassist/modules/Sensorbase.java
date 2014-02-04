@@ -15,7 +15,7 @@ public class Sensorbase
     {
     }
 
-    public String getDistance(int module, int port)
+    public double getDistance(int module, int port)
     {
         d1 = AnalogModule.getInstance(module).getVoltage(port);
         d2 = AnalogModule.getInstance(module).getVoltage(port);
@@ -24,15 +24,15 @@ public class Sensorbase
 
         if (dAvg <= 6)
         {
-            return "too close";
+            return -1;
         }
         else if (dAvg >= 253)
         {
-            return "too far";
+            return -2;
         }
         else
         {
-            return String.valueOf(dAvg);
+            return dAvg;
         }        
     }
 }
