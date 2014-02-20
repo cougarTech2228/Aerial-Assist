@@ -14,15 +14,17 @@ public class RobotMap
     int dbRB = 13;
     
     //Shooter
-    int sM1 = 14;
-    int sM2 = 15;
+    int sM1 = 7;
+    int sM2 = 8;
+    int sM3 = 9;
+    int sM4 = 10;
     int sStopSwitch = 1;
     int sBallDetect = 2;
     
     //Gatherer
-    int gA1 = 1;
-    int gA2 = 2;
-    int gTilter = 16;
+    int gA1 = 5;
+    int gA2 = 6;
+    int gTilter = 14;
     
     //Joysticks
     int j1 = 1;
@@ -30,6 +32,9 @@ public class RobotMap
     
     //Sensors    
     int sonar = 1;
+    
+    //Servo
+    int servoRTilt = 5;
     
     public RobotMap()
     {

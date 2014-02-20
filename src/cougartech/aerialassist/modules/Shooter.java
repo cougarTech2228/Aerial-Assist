@@ -2,109 +2,128 @@ package cougartech.aerialassist.modules;
 
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import java.util.Date;
 
 public class Shooter
 {
     
-    CANJaguar motor;
-    CANJaguar motor2;
-    DigitalInput stopSwitch;
+    Talon mL1;
+    Talon mL2;
+    Talon mR1;
+    Talon mR2;
+    Servo cameraTilt;
+    public DigitalInput stopSwitch;
     public DigitalInput ballDetect;
     Date nowTime;
     public boolean shooting = false;
     boolean reset = false;
     long sTime;
+    long timeOn;
+    public int state = 0;
     
-    public Shooter(int motorPort, int motor2Port, int stopPort, int ballDetectPort)
+    public Shooter(int mL1Port, int mL2Port, int mR1Port, int mR2Port,int stopPort, int ballDetectPort, int cameraTiltPort)
     {
         stopSwitch = new DigitalInput(stopPort);
         ballDetect = new DigitalInput(ballDetectPort);
-        try
-        {    
-            motor = new CANJaguar(motorPort);
-            motor2 = new CANJaguar(motor2Port);
-            motor.enableControl();
-            motor2.enableControl();
-        }
-        catch(CANTimeoutException ex)
-        {
-            ex.printStackTrace();
-        }
+        cameraTilt = new Servo(cameraTiltPort);
+  
+        mL1 = new Talon(mL1Port);
+        mL2 = new Talon(mL2Port);
+        mR1 = new Talon(mR1Port);
+        mR2 = new Talon(mR2Port);
     }
     
+    /*
+     * cameraAutoTilt
+     * - Adjusts the camera to appropriate posistion based on whether there is a ball in the robot
+     */
+    public void cameraAutoTilt()
+    {
+        if(!ballDetect.get())
+        {
+            cameraTilt.set(0.75);
+        }
+        else
+        {
+            cameraTilt.set(1.0);
+        }
+    }      
     
-    public void shoot(long timePer, double motorPower)
+    /*
+     * shoot
+     * - Shooter state machine
+     *      0: Idle
+     *      1: Shoot
+     *      2: Reset
+     * 
+     * @param timePer
+     *      Time that the shooter motors are activated for
+     * @param motorPower
+     *      Power at which the shooter motors are run
+     * @param button
+     *      Operated interface of whether to shoot
+     */
+    public void shoot(double timePer, double motorPower, boolean button)
     {
         nowTime = new Date();
-      
-        if(shooting)
+        
+        switch(state)
         {
-                if(nowTime.getTime() < (sTime + timePer))
+            case 0:
+                mL1.set(0.0);
+                mL2.set(0.0);
+                mR1.set(0.0);
+                mR2.set(0.0);
+                
+                if(button)
                 {
-                    try
+                    if(!ballDetect.get())
                     {
-                        motor.setX(motorPower);
-                        motor2.setX(motorPower);
-                    }
-                    catch(CANTimeoutException ex)
-                    {
-                        ex.printStackTrace();
-                    }
+                        System.out.println("State being set to 1");
+                        timeOn = nowTime.getTime();
+                        sTime = nowTime.getTime();
+                        state = 1;
+                    }                    
+                }
+                break;
+                
+            case 1:
+                if(nowTime.getTime() < sTime + timePer)
+                {
+                    mL1.set(motorPower);
+                    mL2.set(motorPower);
+                    mR1.set(-motorPower);
+                    mR2.set(-motorPower);
                 }
                 else
                 {
-                    try
-                    {
-                        motor.setX(0.0);
-                        motor2.setX(0.0);
-                    }
-                    catch(CANTimeoutException ex)
-                    {
-                        ex.printStackTrace();
-                    }
-                    reset = true;
-                    this.resetArm();
+                    System.out.println("Changing to rev");
+                    System.out.println("Motor was on time: " + (nowTime.getTime() - timeOn));
+                    state = 2;
                 }
-         }
-        else if(!shooting && !ballDetect.get())
-        {
-            sTime = nowTime.getTime();
-            shooting = true;
+                break;
+                
+            case 2:
+                if(stopSwitch.get())
+                {
+                    mL1.set(-0.0625);
+                    mL2.set(0.0);
+                    mR1.set(0.0625);
+                    mR2.set(0.0);
+                }
+                else
+                {
+                    System.out.println("Changing to 0");
+                    state = 0;
+                }
+                break;
+            
+            default:
+                System.out.println("State reached unacceptable place!");
+                break;     
         }
-    }
-    
-    private void resetArm()
-    {
-       if(reset)
-        {
-            if(stopSwitch.get())
-            {
-                try
-                {
-                    motor.setX(0.0);
-                    motor2.setX(0.0);
-                }
-                catch(CANTimeoutException ex)
-                {
-                    ex.printStackTrace();
-                }
-                reset  = false;
-                shooting = false;
-            }
-            else
-            {
-                try
-                {
-                    motor.setX(-0.25);
-                    motor2.setX(-0.25);
-                }
-                catch(CANTimeoutException ex)
-                {
-                    ex.printStackTrace();
-                }                
-            }
-        }
-    }
+    }    
 }

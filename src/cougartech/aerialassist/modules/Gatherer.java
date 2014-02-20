@@ -26,17 +26,23 @@ public class Gatherer
         }        
     }
     
+    /*
+     * armDirection
+     * 
+     * @param direction
+     *      Direction for arms to spin
+     */
     public void armDirection(int direction)
     {
         if(direction == 1)
         {
-            arm1.set(0.5);
-            arm2.set(-0.5);
+            arm1.set(0.35);
+            arm2.set(-0.35);
         }
         else if(direction == -1)
         {
-            arm1.set(-0.5);
-            arm2.set(0.5);
+            arm1.set(-0.35);
+            arm2.set(0.35);
         }
         else
         {
@@ -45,6 +51,12 @@ public class Gatherer
         }
     }
 
+    /*
+     * tiltArm
+     * 
+     * @param direction
+     *      Direction of the tilter to move
+     */
     public void tiltArm(int direction)
     {
         if(direction == 1)
