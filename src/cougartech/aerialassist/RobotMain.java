@@ -47,11 +47,12 @@ public class RobotMain extends IterativeRobot
         sensor = new Sensorbase();
         netTable = NetworkTable.getTable("datatable");
         shot = false;
-        hotStuff = new Eye();
+        //hotStuff = new Eye();
     }   
 
     public void autonomousPeriodic()
     {
+        /*
         //Construct date wrapper
         nowTime = new Date();
         
@@ -106,7 +107,7 @@ public class RobotMain extends IterativeRobot
              * - If target is found the shooter will activate
              * - After 5 seconds of autonomous the shooter will activate as an override 
              */
-            case 2:
+            /*case 2:
                 shot = hotStuff.hotMess();
                 if(shot)
                 {
@@ -175,6 +176,7 @@ public class RobotMain extends IterativeRobot
                 System.out.println("Autonomous has reached the wrong state. If you can read this contact Michael Guglielmo");
                 break;
         }
+    */
     }  
 
     public void teleopPeriodic()
