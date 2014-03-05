@@ -36,13 +36,13 @@ public class Gatherer
     {
         if(direction == 1)
         {
-            arm1.set(0.35);
-            arm2.set(-0.35);
+            arm1.set(0.5);
+            arm2.set(-0.5);
         }
         else if(direction == -1)
         {
-            arm1.set(-0.35);
-            arm2.set(0.35);
+            arm1.set(-0.5);
+            arm2.set(0.5);
         }
         else
         {
