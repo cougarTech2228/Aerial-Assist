@@ -31,18 +31,20 @@ public class Gatherer
      * 
      * @param direction
      *      Direction for arms to spin
+     * @param speed
+     *      Speed at which the arms spin at
      */
-    public void armDirection(int direction)
+    public void armDirection(int direction, double speed)
     {
         if(direction == 1)
         {
-            arm1.set(0.5);
-            arm2.set(-0.5);
+            arm1.set(speed);
+            arm2.set(-speed);
         }
         else if(direction == -1)
         {
-            arm1.set(-0.5);
-            arm2.set(0.5);
+            arm1.set(-speed);
+            arm2.set(speed);
         }
         else
         {
