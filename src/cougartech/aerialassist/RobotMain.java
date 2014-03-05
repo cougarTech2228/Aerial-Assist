@@ -182,7 +182,7 @@ public class RobotMain extends IterativeRobot
     public void teleopPeriodic()
     {
         //Drivebase
-        if (!reverseDrive)
+        if(!reverseDrive)
         {
             drive.doDrive();
             netTable.putBoolean("reverseDrive", false);
@@ -193,18 +193,18 @@ public class RobotMain extends IterativeRobot
             netTable.putBoolean("reverseDrive", true);
         }
 
-        if (drive.driveJoy.getRawButton(12))
+        if(drive.driveJoy.getRawButton(12))
         {
             reverseDrive = false;
         }
-        else if (drive.driveJoy.getRawButton(11))
+        else if(drive.driveJoy.getRawButton(11))
         {
             reverseDrive = true;
         }
 
 
         //Network Table
-        if (!once)
+        if(!once)
         {
             netTable.putNumber("timeOn", 0);
             netTable.putNumber("motorPower", 0);
@@ -217,12 +217,12 @@ public class RobotMain extends IterativeRobot
 
 
         //Sonar Distance Sensor
-        if ((MathUtils.round(sensor.getDistance(1, 1)) / 12) >= 7 && (MathUtils.round(sensor.getDistance(1, 1)) / 12) <= 9)
+        if((MathUtils.round(sensor.getDistance(1, 1)) / 12) >= 7 && (MathUtils.round(sensor.getDistance(1, 1)) / 12) <= 9)
         {
             netTable.putBoolean("near", true);
             netTable.putBoolean("far", false);
         }
-        else if (MathUtils.round(sensor.getDistance(1, 1)) / 12 >= 13 && (MathUtils.round(sensor.getDistance(1, 1)) / 12) <= 15)
+        else if(MathUtils.round(sensor.getDistance(1, 1)) / 12 >= 13 && (MathUtils.round(sensor.getDistance(1, 1)) / 12) <= 15)
         {
             netTable.putBoolean("near", false);
             netTable.putBoolean("far", true);
@@ -275,12 +275,12 @@ public class RobotMain extends IterativeRobot
 
         //Gatherer
         //Tilt
-        if (joyG.getY() >= 0.2)
+        if(joyG.getY() >= 0.2)
         {
             //Out
             gatherer.tiltArm(-1);
         }
-        else if (joyG.getY() <= -0.2)
+        else if(joyG.getY() <= -0.2)
         {
             //In
             gatherer.tiltArm(1);
@@ -291,19 +291,19 @@ public class RobotMain extends IterativeRobot
         }
 
         //Spin Arm
-        if (joyG.getRawButton(1))
+        if(joyG.getRawButton(1))
         {
             //In
-            gatherer.armDirection(1);
+            gatherer.armDirection(1, (0.5*joyG.getThrottle()) - 0.5);
         }
-        else if (joyG.getRawButton(2))
+        else if(joyG.getRawButton(2))
         {
             //Out
-            gatherer.armDirection(-1);
+            gatherer.armDirection(-1, (0.5*joyG.getThrottle()) - 0.5);
         }
         else
         {
-            gatherer.armDirection(0);
+            gatherer.armDirection(0, 0.0);
         }
     }
 
