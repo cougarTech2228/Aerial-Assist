@@ -5,10 +5,6 @@ import cougartech.aerialassist.modules.*;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.camera.AxisCamera;
-import edu.wpi.first.wpilibj.image.*;
-import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
-import edu.wpi.first.wpilibj.Servo;
 import java.util.Date;
 
 public class RobotMain extends IterativeRobot
@@ -28,6 +24,7 @@ public class RobotMain extends IterativeRobot
     boolean wantShoot = false;
     boolean once = false;
     boolean reverseDrive = false;
+    int shooterMode = 1;
     
     //Auto
     int autoState = 0;
@@ -236,9 +233,43 @@ public class RobotMain extends IterativeRobot
 
 
         //Shooter
+        /*
+         * shooterMode:
+         * 1- Far
+         * 2- Mid
+         * 3- Near
+         */
         shooter.shoot(netTable.getNumber("timeOn"), netTable.getNumber("motorPower"), drive.driveJoy.getRawButton(1));
         shooter.cameraAutoTilt();
 
+        /*
+        if(shooterMode == 1)
+        {
+            shooter.shoot(netTable.getNumber("timeOn"), netTable.getNumber("motorPower"), drive.driveJoy.getRawButton(6));
+        }
+        else if(shooterMode == 2)
+        {
+            shooter.shoot(netTable.getNumber("timeOn"), netTable.getNumber("motorPower"), drive.driveJoy.getRawButton(2));
+        }
+        else if(shooterMode == 3)
+        {
+            
+        }
+        
+        if(drive.driveJoy.getRawButton(1))
+        {
+            shooterMode = 1;
+        }
+        else if(drive.driveJoy.getRawButton(2))
+        {
+            shooterMode = 3;
+        }
+        else if(drive.driveJoy.getRawButton(7))
+        {
+            shooterMode = 2;
+        }
+        */
+            
 
         //Gatherer
         //Tilt
