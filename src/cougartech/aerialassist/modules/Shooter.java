@@ -1,19 +1,17 @@
 package cougartech.aerialassist.modules;
 
-import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import java.util.Date;
 
 public class Shooter
 {
     
-    Talon mL1;
-    Talon mL2;
-    Talon mR1;
-    Talon mR2;
+    Jaguar mL1;
+    Jaguar mL2;
+    Jaguar mR1;
+    Jaguar mR2;
     Servo cameraTilt;
     public DigitalInput stopSwitch;
     public DigitalInput ballDetect;
@@ -30,10 +28,10 @@ public class Shooter
         ballDetect = new DigitalInput(ballDetectPort);
         cameraTilt = new Servo(cameraTiltPort);
   
-        mL1 = new Talon(mL1Port);
-        mL2 = new Talon(mL2Port);
-        mR1 = new Talon(mR1Port);
-        mR2 = new Talon(mR2Port);
+        mL1 = new Jaguar(mL1Port);
+        mL2 = new Jaguar(mL2Port);
+        mR1 = new Jaguar(mR1Port);
+        mR2 = new Jaguar(mR2Port);
     }
     
     /*
