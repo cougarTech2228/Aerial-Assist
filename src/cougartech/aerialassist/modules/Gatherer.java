@@ -1,20 +1,20 @@
 package cougartech.aerialassist.modules;
 
-import edu.wpi.first.wpilibj.CANJaguar;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 public class Gatherer
 {
-    CANJaguar tilter;
-    Talon arm1;
-    Talon arm2;    
+    Jaguar tilter;
+    Jaguar arm1;
+    Jaguar arm2;    
     
     public Gatherer(int arm1Port, int arm2Port, int tilterPort)
     {
-        arm1 = new Talon(arm1Port);
-        arm2 = new Talon(arm2Port);
-        
+        arm1 = new Jaguar(arm1Port);
+        arm2 = new Jaguar(arm2Port);
+        tilter = new Jaguar(tilterPort);
+        /*
         try
         {
             tilter = new CANJaguar(tilterPort);
@@ -23,7 +23,7 @@ public class Gatherer
         catch(CANTimeoutException ex)
         {
             ex.printStackTrace();
-        }        
+        }*/        
     }
     
     /*
@@ -63,6 +63,8 @@ public class Gatherer
     {
         if(direction == 1)
         {   
+            tilter.set(0.5);
+            /*
             try
             {
                 tilter.setX(0.5);
@@ -70,10 +72,12 @@ public class Gatherer
             catch(CANTimeoutException ex)
             {
                 ex.printStackTrace();
-            }
+            }*/
         }
         else if(direction == -1)
         {
+            tilter.set(-0.5);
+            /*
             try
             {
                 tilter.setX(-0.5);
@@ -81,10 +85,12 @@ public class Gatherer
             catch(CANTimeoutException ex)
             {
                 ex.printStackTrace();
-            }
+            }*/
         }
         else
         {
+            tilter.set(0.0);
+            /*
            try
             {
                 tilter.setX(0.0);
@@ -92,7 +98,7 @@ public class Gatherer
             catch(CANTimeoutException ex)
             {
                 ex.printStackTrace(); 
-            }
+            }*/
         }
     }
 }

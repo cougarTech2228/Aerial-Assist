@@ -80,6 +80,9 @@ public class Shooter
                 {
                     if(!ballDetect.get())
                     {
+                        System.out.println("--------");
+                        System.out.println("timePer: " + timePer);
+                        System.out.println("motorPower: " + motorPower);
                         System.out.println("State being set to 1");
                         timeOn = nowTime.getTime();
                         sTime = nowTime.getTime();
@@ -105,7 +108,7 @@ public class Shooter
                 break;
                 
             case 2:
-                if(stopSwitch.get())
+                if(!stopSwitch.get())
                 {
                     mL1.set(-0.0625);
                     mL2.set(0.0);
@@ -123,5 +126,24 @@ public class Shooter
                 System.out.println("State reached unacceptable place!");
                 break;     
         }
-    }    
+    }   
+    
+    public void resetArm()
+    {
+        if(!stopSwitch.get())
+        {
+            mL1.set(-0.0625);
+            mL2.set(0.0);
+            mR1.set(0.0625);
+            mR2.set(0.0);
+        }
+        else
+        {
+            System.out.println("Arm manually reset");
+            mL1.set(0.0);
+            mL2.set(0.0);
+            mR1.set(0.0);
+            mR2.set(0.0);
+        }
+    }
 }

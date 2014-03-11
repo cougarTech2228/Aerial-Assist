@@ -43,7 +43,7 @@ public class RobotMain extends IterativeRobot
         drive = new Drivebase(10, 11, 12, 13, 1);
         joyG = new Joystick(2);
         shooter = new Shooter(9, 10, 7, 8, 1, 2, 3);
-        gatherer = new Gatherer(5, 6, 14);
+        gatherer = new Gatherer(5, 6, 4);
         sensor = new Sensorbase();
         netTable = NetworkTable.getTable("datatable");
         shot = false;
@@ -52,7 +52,7 @@ public class RobotMain extends IterativeRobot
 
     public void autonomousPeriodic()
     {
-        /*
+        
         //Construct date wrapper
         nowTime = new Date();
         
@@ -67,11 +67,11 @@ public class RobotMain extends IterativeRobot
                     autoOnce = true;
                 }
                 
-                if (MathUtils.round(sensor.getDistance(1, 1)) / 12 >= 12 || sensor.getDistance(1, 1) == -2)
+                if (sensor.getDistance(1, 1) / 12 >= 7.5 || sensor.getDistance(1, 1) == -2)
                 {
                     drive.driveForward(0.33);
                 }
-                else if (MathUtils.round(sensor.getDistance(1, 1)) / 12 < 10 || sensor.getDistance(1, 1) == -1)
+                else if (sensor.getDistance(1, 1) / 12 < 6.5 || sensor.getDistance(1, 1) == -1)
                 {
                     drive.driveForward(-0.33);
                 }
@@ -80,9 +80,9 @@ public class RobotMain extends IterativeRobot
                     drive.driveForward(0.0);
                     sDownTime = nowTime.getTime();
                     System.out.println("Switching to autoState 1");
-                    autoState = 1;
+                    //autoState = 1;
                 }
-                hotStuff.watch();
+                //hotStuff.watch();
                 break;
 
             //Lower Gatherer Arms
@@ -101,17 +101,17 @@ public class RobotMain extends IterativeRobot
                 break;
 
             
-            /*
-             * Shoot
+           
+             /* Shoot
              * - Will utilize camera target recongition in previous states
              * - If target is found the shooter will activate
              * - After 5 seconds of autonomous the shooter will activate as an override 
              */
-            /*case 2:
+            case 2:
                 shot = hotStuff.hotMess();
                 if(shot)
                 {
-                    shooter.shoot(225, 1.0, true);
+                    shooter.shoot(270, 0.95, true);
 
                     if(shooter.state == 0)
                     {
@@ -128,7 +128,7 @@ public class RobotMain extends IterativeRobot
                 if(nowTime.getTime() >= autoTime + 5000)
                 {
                     caught = true;
-                    shooter.shoot(225, 1.0, true);
+                    shooter.shoot(270, 0.95, true);
                     
                     if(shooter.state == 0)
                     {
@@ -176,7 +176,7 @@ public class RobotMain extends IterativeRobot
                 System.out.println("Autonomous has reached the wrong state. If you can read this contact Michael Guglielmo");
                 break;
         }
-    */
+    
     }  
 
     public void teleopPeriodic()
@@ -237,40 +237,29 @@ public class RobotMain extends IterativeRobot
         //Shooter
         /*
          * shooterMode:
-         * 1- Far
-         * 2- Mid
-         * 3- Near
+         * 1- Far [5-7 feet]
+         * 2- Near [3 feet]
          */
-        shooter.shoot(netTable.getNumber("timeOn"), netTable.getNumber("motorPower"), drive.driveJoy.getRawButton(1));
+        //shooter.shoot(netTable.getNumber("timeOn"), netTable.getNumber("motorPower"), drive.driveJoy.getRawButton(1));
         shooter.cameraAutoTilt();
 
-        /*
-        if(shooterMode == 1)
-        {
-            shooter.shoot(netTable.getNumber("timeOn"), netTable.getNumber("motorPower"), drive.driveJoy.getRawButton(6));
-        }
-        else if(shooterMode == 2)
-        {
-            shooter.shoot(netTable.getNumber("timeOn"), netTable.getNumber("motorPower"), drive.driveJoy.getRawButton(2));
-        }
-        else if(shooterMode == 3)
-        {
-            
-        }
-        
         if(drive.driveJoy.getRawButton(1))
         {
             shooterMode = 1;
         }
         else if(drive.driveJoy.getRawButton(2))
         {
-            shooterMode = 3;
-        }
-        else if(drive.driveJoy.getRawButton(7))
-        {
             shooterMode = 2;
         }
-        */
+        
+        if(shooterMode == 1)
+        {
+            shooter.shoot(270, 0.95, drive.driveJoy.getRawButton(1));
+        }
+        else if(shooterMode == 2)
+        {
+            shooter.shoot(230, 0.95, drive.driveJoy.getRawButton(2));
+        }      
             
 
         //Gatherer
